@@ -1,0 +1,693 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This app is used to show releasing and released movies",
+    "version": "1.0.3",
+    "title": "IMDB",
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "movie",
+      "description": "To add movie details"
+    },
+    {
+      "name": "actor",
+      "description": "The details of actor's"
+    },
+    {
+      "name": "producer",
+      "description": "To add all details of producer's"
+    }
+  ],
+  "$schema": ["http", "https"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/addmovie": {
+      "post": {
+        "tags": ["movie"],
+        "summary": "To add movie details",
+        "description": "The movie which is released recently, add all details movie",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/definition/addmovie"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/movie": {
+      "get": {
+        "tags": ["movie"],
+        "summary": "To get all movie details",
+        "description": "Gets all the movie details",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/addactor/{movieId}": {
+      "post": {
+        "tags": ["movie"],
+        "summary": "To add actors to movie",
+        "description": "To add actor's to the movie",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "path",
+            "description": "ID of movie ie required to store the actor data",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/definition/addactor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/removeactor/{movieId}": {
+      "post": {
+        "tags": ["movie"],
+        "summary": "To remove actors from movie",
+        "description": "To remove actor's from the movie",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "path",
+            "description": "ID of movie is required to remove the actor data",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/definition/removeactor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/movie/{movieId}": {
+      "delete": {
+        "tags": ["movie"],
+        "summary": "To delete particular movie details",
+        "description": "Delete particular movie details",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "path",
+            "description": "ID of movie is required to delete the movie data",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "404": {
+            "description": "Data not found"
+          }
+        }
+      }
+    },
+    "/addproducer/{movieId}": {
+      "post": {
+        "tags": ["movie"],
+        "summary": "To add producer to the movie details",
+        "description": "This route is used to add producer to the movie",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "path",
+            "description": "ID of movie is required to delete the movie data",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/definition/addproducer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/removeproducer/{movieId}": {
+      "post": {
+        "tags": ["movie"],
+        "summary": "To remove actors from movie",
+        "description": "To remove actor's from the movie",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "path",
+            "description": "ID of movie is required to remove the producer data",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/movie/{movieId}": {
+      "put": {
+        "tags": ["movie"],
+        "summary": "To edit movie details",
+        "description": "The edit all the details of the movie",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "path",
+            "description": "ID of movie is required to remove the producer data",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/definition/editmovie"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/movieposter/{movieId}": {
+      "post": {
+        "tags": ["movie"],
+        "summary": "To upload movie poster",
+        "consumes": ["multipart/form-data"],
+        "description": "The movie which is released recently, add all details movie",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "movieId",
+            "in": "path",
+            "description": "ID of movie is required to remove the producer data",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "type": "file",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/actor": {
+      "post": {
+        "tags": ["actor"],
+        "summary": "To add actor's details",
+        "description": "The actor's details are to be added",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/definition/actor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/actor": {
+      "get": {
+        "tags": ["actor"],
+        "summary": "To get all actor's details",
+        "description": "Gets all the actor details",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "404": {
+            "description": "Data not found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/actor/{actorId}": {
+      "delete": {
+        "tags": ["actor"],
+        "summary": "To delete particular actor details",
+        "description": "Delete particular actor details",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "actorId",
+            "in": "path",
+            "description": "ID of movie is required to delete the actor data",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "404": {
+            "description": "Data not found"
+          }
+        }
+      }
+    },
+    "/actor/{actorId}": {
+      "put": {
+        "tags": ["actor"],
+        "summary": "To edit actor details",
+        "description": "The edit all the details of the actor",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "actorId",
+            "in": "path",
+            "description": "ID of movie is required to remove the producer data",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/definition/actor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/producer": {
+      "post": {
+        "tags": ["producer"],
+        "summary": "To add producer's details",
+        "description": "The producer's details are to be added",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/definition/actor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/producer": {
+      "get": {
+        "tags": ["producer"],
+        "summary": "To get all producer's details",
+        "description": "Gets all the producer details",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "404": {
+            "description": "Data not found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/producer/{producerId}": {
+      "delete": {
+        "tags": ["producer"],
+        "summary": "To delete particular producer details",
+        "description": "Delete particular producer details",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "producerId",
+            "in": "path",
+            "description": "ID of movie is required to delete the producer data",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          },
+          "404": {
+            "description": "Data not found"
+          }
+        }
+      }
+    },
+    "/producer/{producerId}": {
+      "put": {
+        "tags": ["producer"],
+        "summary": "To edit producer details",
+        "description": "The edit all the details of the producer",
+        "produces": ["application/json", "application/xml"],
+        "parameters": [
+          {
+            "name": "producerId",
+            "in": "path",
+            "description": "ID of movie is required to remove the producer data",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "type": "string",
+            "schema": {
+              "$ref": "#/definition/actor"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Operation"
+          },
+          "400": {
+            "description": "Unsuccessful operation"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "addmovie": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "yearOfRelease": {
+          "type": "number"
+        },
+        "plot": {
+          "type": "string"
+        },
+        "producer": {
+          "type": "object"
+        },
+        "actors": {
+          "type": "object"
+        }
+      },
+      "example": {
+        "name": "xyz abc",
+        "yearOfRelease": 2019,
+        "plot": "This is the movie related to someone",
+        "producer": {
+          "producerName": "pqr lmn"
+        },
+        "actors": [
+          {
+            "actorName": "abc mno"
+          }
+        ]
+      }
+    },
+    "addactor": {
+      "type": "object",
+      "properties": {
+        "actorName": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "actorName": "xyz"
+      }
+    },
+    "removeactor": {
+      "type": "object",
+      "properties": {
+        "actorId": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "actorId": "This should be the combination of numbers between 0-9 and small alphabets"
+      }
+    },
+    "addproducer": {
+      "type": "string",
+      "properties": {
+        "producerName": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "producerName": "This should be a character string"
+      }
+    },
+    "editmovie": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "yearOfRelease": {
+          "type": "number"
+        },
+        "plot": {
+          "type": "string"
+        },
+        "producer": {
+          "type": "object"
+        },
+        "actors": [
+          {
+            "type": "object"
+          }
+        ]
+      },
+      "example": {
+        "name": "xyz abc",
+        "yearOfRelease": 2019,
+        "plot": "This is the movie related to someone",
+        "producer": {
+          "name": "pqr lmn"
+        },
+        "actors": [
+          {
+            "name": "abc mno"
+          }
+        ]
+      }
+    },
+    "actor": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "sex": {
+          "type": "number"
+        },
+        "dob": {
+          "type": "string"
+        },
+        "bio": {
+          "type": "string"
+        }
+      },
+      "example": {
+        "name": "xyz abc",
+        "sex": "f",
+        "dob": "31/02/1998",
+        "bio": "I was born in mumbai"
+      }
+    }
+  }
+}
