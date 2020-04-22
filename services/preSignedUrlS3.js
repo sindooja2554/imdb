@@ -30,7 +30,7 @@ module.exports = {
             if (error) {
               return callback(error);
             } else {
-              let url = data;
+              let url = data.split("?")[0];
               return callback(null, url);
             }
           });

@@ -38,7 +38,12 @@ class MovieController {
       request
         .check("yearOfRelease", "Year should be in year format")
         .matches(/^[0-9]{4}$/);
-      request.check("plot", "Plot must be character string").isAlpha();
+      // request.check("plot", "Plot must be character string").isAlpha();
+      request
+        .check("releaseDate", "Date of release must be in DD/MM/YYYY or DD-MM-YYYY")
+        .matches(
+          /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
+        );
 
       let errors = request.validationErrors();
       let result = {};
@@ -69,6 +74,8 @@ class MovieController {
               name: request.body.name,
               yearOfRelease: request.body.yearOfRelease,
               plot: request.body.plot,
+              releaseDate: request.body.releaseDate,
+              rating: request.body.rating,
             };
             logger.info(
               "data after adding actor " + JSON.stringify(addMovieObject)
@@ -77,8 +84,7 @@ class MovieController {
               .addMovie(addMovieObject)
               .then((reply) => {
                 logger.info(
-                  "actors length ------------------>" +
-                    Object.keys(request.body.actors).length
+                  "actors length ------------------>" + Object.keys(request.body.actors).length
                 );
                 let count = 0;
                 if (Object.keys(request.body.actors).length !== 0) {
@@ -100,6 +106,7 @@ class MovieController {
                           if (
                             count === Object.keys(request.body.actors).length
                           ) {
+                            logger.info("count==================>" + count);
                             result.data = data;
                             result.success = true;
                             result.message = "Added successfully";
@@ -593,7 +600,7 @@ class MovieController {
                         };
                         logger.info(
                           "createObj==========>" +
-                            JSON.stringify(createActorObject)
+                          JSON.stringify(createActorObject)
                         );
                         actorService
                           .update(
@@ -614,8 +621,8 @@ class MovieController {
                                 ) {
                                   logger.info(
                                     "data after saving every thing" +
-                                      reply +
-                                      count
+                                    reply +
+                                    count
                                   );
                                   result.data = data;
                                   result.success = true;

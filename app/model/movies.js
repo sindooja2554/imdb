@@ -27,9 +27,17 @@ const movieSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    releaseDate: {
+      type: String,
+      required: true,
+    },
     plot: {
       type: String,
       required: true,
+    },
+    rating: {
+      type: Number,
+      default: null,
     },
     poster: {
       type: String,
@@ -66,6 +74,8 @@ class MovieApi {
       name: request.name,
       yearOfRelease: request.yearOfRelease,
       plot: request.plot,
+      releaseDate: request.releaseDate,
+      rating: request.rating,
       producer: request.producer,
       actors: request.actors || [],
     });

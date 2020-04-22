@@ -105,7 +105,7 @@ class MovieServices {
         .findOne({ _id: request.id })
         .then((data) => {
           if (data !== null) {
-            logger.info("request in service" + request);
+            logger.info("request in service" + JSON.stringify(request));
             movieModel
               .update({ _id: data._id }, { poster: request.imageUrl })
               .then((data) => {

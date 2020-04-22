@@ -16,6 +16,7 @@ const express = require("express");
 const validator = require("express-validator");
 const bodyparser = require("body-parser");
 const swaggerUi = require("swagger-ui-express");
+const cors = require("cors");
 const mongoose = require("./config/database.config");
 const route = require("./routes/route");
 const logger = require("./config/winston");
@@ -26,6 +27,7 @@ const app = express();
 
 const port = process.env.PORT;
 
+app.use(cors());
 app.use("/imdb", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(bodyparser.json());
 app.use(validator());
