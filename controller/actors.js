@@ -94,19 +94,19 @@ class Controller {
           result.success = true;
           result.message = "Showing all the data of actors";
           result.data = data;
-          return response.status(200).send(data);
+          return response.status(200).send(result);
         } else {
           result.success = true;
           result.message = "No data found";
           result.data = data;
-          return response.status(404).send(data);
+          return response.status(404).send(result);
         }
       })
       .catch((error) => {
         result.success = false;
         result.message = "Server couldn't completely process the request";
         result.error = error;
-        return response.status(500).send(error);
+        return response.status(500).send(result);
       });
   }
 

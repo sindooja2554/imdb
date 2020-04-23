@@ -182,6 +182,19 @@ class MovieServices {
         });
     });
   }
+
+  getMovie(idObject) {
+    return new Promise((resolve, reject) => {
+      movieModel
+        .findOne({ _id: idObject._id })
+        .then((data) => {
+          return resolve(data);
+        })
+        .catch((error) => {
+          return reject(error);
+        });
+    });
+  }
 }
 
 module.exports = new MovieServices();

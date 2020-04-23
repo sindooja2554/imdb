@@ -37,6 +37,7 @@ routes.post("/addproducer/:movieId", movie.addProducer);
 routes.post("/removeproducer/:movieId", movie.removeProducer);
 routes.post("/movieposter/:movieId", upload.single("image"), movie.moviePoster);
 routes.get("/movie", movie.getAllMovies);
+routes.get("/movie/:movieId", movie.getMovie);
 routes.delete("/movie/:movieId", movie.delete);
 routes.put("/movie/:movieId", movie.editMovie);
 

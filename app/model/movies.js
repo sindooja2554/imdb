@@ -99,7 +99,7 @@ class MovieApi {
    */
   findOne(request) {
     return new Promise((resolve, reject) => {
-      Movie.findOne(request)
+      Movie.findOne(request).populate("actors").populate("producer")
         .then((data) => {
           return resolve(data);
         })

@@ -697,6 +697,34 @@ class MovieController {
       return response.status(400).send(result);
     }
   }
+
+  getMovie(request, response) {
+    let result = {};
+    let idObject = {
+      _id: request.params.movieId,
+    };
+    movieService
+      .getMovie(idObject)
+      .then((data) => {
+        if (data !== null) {
+          result.success = true;
+          result.message = "Successfull got all movies";
+          result.data = data;
+          return response.status(200).send(result);
+        } else {
+          result.success = true;
+          result.message = "No data found";
+          result.data = data;
+          return response.status(404).send(result);
+        }
+      })
+      .catch((error) => {
+        result.success = false;
+        result.message = "Unable to get all movies";
+        result.error = error;
+        return response.status(500).send(error);
+      });
+  }
 }
 
 module.exports = new MovieController();
