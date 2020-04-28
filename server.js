@@ -21,6 +21,7 @@ const mongoose = require("./config/database.config");
 const route = require("./routes/route");
 const logger = require("./config/winston");
 const swaggerDocument = require("./swagger");
+const redis = require("./services/redis");
 require("dotenv/").config();
 
 const app = express();
@@ -35,5 +36,8 @@ app.use("/", route);
 
 app.listen(port, () => {
   mongoose.connect();
+  redis.connect();
   logger.info(`Server is listening on ${port}`);
 });
+
+module.exports = app;
