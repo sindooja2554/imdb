@@ -7,24 +7,28 @@
  * @since       01 April 2020
  */
 
-const actorModel = require("../app/model/actors");
-const movieservice = require("./movies");
-const logger = require("../config/winston");
+const actorModel = require('../app/model/actors');
+const movieservice = require('./movies');
+const logger = require('../config/winston');
 
 class Services {
   addActor(request) {
+    logger.info('inside create service');
     return new Promise(function (resolve, reject) {
       actorModel.findOne({ name: request.name }).then((data) => {
         if (data === null) {
+          logger.info('in if');
           actorModel
             .add(request)
             .then((data) => {
               return resolve(data);
             })
             .catch((error) => {
+              logger.error('in error', error);
               return reject(error);
             });
         } else {
+          logger.info('---------------->', data);
           return resolve(data); // Already exist
         }
       });
@@ -46,6 +50,7 @@ class Services {
 
   findOne(request) {
     return new Promise((resolve, reject) => {
+      logger.info('inside findOne');
       actorModel
         .findOne({ name: request.name })
         .then((data) => {
@@ -70,7 +75,7 @@ class Services {
             movieservice
               .removeActorFromMovie({ actors: data._id }, editObject)
               .then((reply) => {
-                logger.info("response--------------->", reply);
+                logger.info('response--------------->', reply);
                 return resolve(data);
               })
               .catch((error) => {
@@ -96,7 +101,7 @@ class Services {
             dob: request.dob ? request.dob : data.dob,
             bio: request.bio ? request.bio : data.bio,
           };
-          logger.info("calling model Update");
+          logger.info('calling model Update');
           actorModel
             .update({ _id: data._id }, actor)
             .then((data) => {

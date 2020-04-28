@@ -7,10 +7,11 @@
  * @since       02 April 2020
  */
 
-const movieModel = require("../app/model/movies");
-const actorService = require("./actors");
-const producerModel = require("../app/model/producers");
-const logger = require("../config/winston");
+const movieModel = require('../app/model/movies');
+const actorService = require('./actors');
+const actorModel = require('../app/model/actors');
+const producerModel = require('../app/model/producers');
+const logger = require('../config/winston');
 
 class MovieServices {
   addMovie(request) {
@@ -29,7 +30,7 @@ class MovieServices {
               return reject(error);
             });
         } else {
-          return resolve("Movie data already exists");
+          return resolve('Movie data already exists');
         }
       });
     });
@@ -37,18 +38,38 @@ class MovieServices {
 
   addActorInMovie(request, movieObject) {
     return new Promise((resolve, reject) => {
-      actorService.findOne({ name: request.actorName }).then((data) => {
+      logger.info(
+        'request in add actor to movie' +
+          JSON.stringify(request) +
+          JSON.stringify(movieObject)
+      );
+      actorModel.findOne(request).then((data) => {
         if (data !== null) {
           movieModel
-            .update(
-              { _id: movieObject.movieId },
-              { $push: { actors: data._id } }
-            )
-            .then((data) => {
-              return resolve(data);
+            .findOne({
+              $and: [
+                { $or: [{ _id: movieObject.movieId }] },
+                { $or: [{ actors: data._id }] },
+              ],
             })
-            .catch((error) => {
-              return reject(error);
+            .then((reply) => {
+              logger.info('data after searching ' + JSON.stringify(reply));
+              if (reply === null) {
+                movieModel
+                  .update(
+                    { _id: movieObject.movieId },
+                    { $push: { actors: data._id } }
+                  )
+                  .then((data) => {
+                    return resolve(data);
+                  })
+                  .catch((error) => {
+                    return reject(error);
+                  });
+              } else {
+                logger.info('reply' + JSON.stringify(reply));
+                return resolve(reply);
+              }
             });
         }
       });
@@ -82,7 +103,7 @@ class MovieServices {
         }
       });
     }).catch((error) => {
-      logger.error("error----------->" + error);
+      logger.error('error----------->' + error);
     });
   }
 
@@ -105,7 +126,7 @@ class MovieServices {
         .findOne({ _id: request.id })
         .then((data) => {
           if (data !== null) {
-            logger.info("request in service" + JSON.stringify(request));
+            logger.info('request in service' + JSON.stringify(request));
             movieModel
               .update({ _id: data._id }, { poster: request.imageUrl })
               .then((data) => {
@@ -115,7 +136,7 @@ class MovieServices {
                 return reject(error);
               });
           } else {
-            return reject("No data Found");
+            return reject('No data Found');
           }
         })
         .catch((error) => {

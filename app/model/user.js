@@ -12,8 +12,8 @@
  * @const       mongoose Mongoose constant having the `mongoose` module
  */
 
-const mongoose = require("mongoose");
-let logger = require("../../config/winston");
+const mongoose = require('mongoose');
+let logger = require('../../config/winston');
 
 const UserSchema = mongoose.Schema(
   {
@@ -52,7 +52,7 @@ const UserSchema = mongoose.Schema(
     },
     imageUrl: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   {
@@ -60,7 +60,7 @@ const UserSchema = mongoose.Schema(
   }
 );
 
-let User = mongoose.model("User", UserSchema);
+let User = mongoose.model('User', UserSchema);
 
 class Users {
   /**
@@ -73,9 +73,9 @@ class Users {
   findOne(request, callback) {
     User.findOne(request, (error, data) => {
       if (error) {
-        return callback("Error while finding user");
+        return callback('Error while finding user');
       } else if (data === null) {
-        logger.info("model find one", data);
+        logger.info('model find one', data);
         return callback(error, null);
       } else {
         return callback(null, data);

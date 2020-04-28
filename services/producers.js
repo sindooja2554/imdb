@@ -7,9 +7,9 @@
  * @since       03 April 2020
  */
 
-let producerModel = require("../app/model/producers");
-let movieModel = require("../app/model/movies");
-let logger = require("../config/winston");
+let producerModel = require('../app/model/producers');
+let movieModel = require('../app/model/movies');
+let logger = require('../config/winston');
 
 class ProducerServices {
   create(request) {
@@ -17,7 +17,7 @@ class ProducerServices {
       producerModel
         .findOne({ name: request.name })
         .then((data) => {
-          logger.info("data from findone " + JSON.stringify(data));
+          logger.info('data from findone ' + JSON.stringify(data));
           if (data === null) {
             producerModel
               .create(request)
@@ -100,7 +100,7 @@ class ProducerServices {
             dob: request.dob ? request.dob : data.dob,
             bio: request.bio ? request.bio : data.bio,
           };
-          logger.info("calling model Update");
+          logger.info('calling model Update');
           producerModel
             .update({ _id: data._id }, producer)
             .then((data) => {

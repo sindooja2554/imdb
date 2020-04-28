@@ -8,13 +8,13 @@
  * @since       02 April 2020
  */
 
-let movieService = require("../services/movies");
-let logger = require("../config/winston");
-let actorService = require("../services/actors");
-let producerService = require("../services/producers");
-let movieModel = require("../app/model/movies");
-let upload = require("../services/s3");
-let signedUrl = require("../services/preSignedUrlS3");
+let movieService = require('../services/movies');
+let logger = require('../config/winston');
+let actorService = require('../services/actors');
+let producerService = require('../services/producers');
+let movieModel = require('../app/model/movies');
+let upload = require('../services/s3');
+let signedUrl = require('../services/preSignedUrlS3');
 
 class MovieController {
   addMovie(request, response) {
@@ -24,23 +24,26 @@ class MovieController {
         request.body.yearOfRelease === undefined ||
         request.body.plot === undefined
       )
-        throw "Request body cannot be undefined";
+        throw 'Request body cannot be undefined';
       if (
         request.body.name === null ||
         request.body.yearOfRelease === null ||
         request.body.plot === null
       )
-        throw "Request body cannot be null";
+        throw 'Request body cannot be null';
 
       request
-        .check("yearOfRelease", "Year Of Release must be numberis")
+        .check('yearOfRelease', 'Year Of Release must be numberis')
         .isNumeric();
       request
-        .check("yearOfRelease", "Year should be in year format")
+        .check('yearOfRelease', 'Year should be in year format')
         .matches(/^[0-9]{4}$/);
       // request.check("plot", "Plot must be character string").isAlpha();
       request
-        .check("releaseDate", "Date of release must be in DD/MM/YYYY or DD-MM-YYYY")
+        .check(
+          'releaseDate',
+          'Date of release must be in DD/MM/YYYY or DD-MM-YYYY'
+        )
         .matches(
           /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
         );
@@ -78,13 +81,14 @@ class MovieController {
               rating: request.body.rating,
             };
             logger.info(
-              "data after adding actor " + JSON.stringify(addMovieObject)
+              'data after adding actor ' + JSON.stringify(addMovieObject)
             );
             movieService
               .addMovie(addMovieObject)
               .then((reply) => {
                 logger.info(
-                  "actors length ------------------>" + Object.keys(request.body.actors).length
+                  'actors length ------------------>' +
+                  Object.keys(request.body.actors).length
                 );
                 let count = 0;
                 if (Object.keys(request.body.actors).length !== 0) {
@@ -106,15 +110,15 @@ class MovieController {
                           if (
                             count === Object.keys(request.body.actors).length
                           ) {
-                            logger.info("count==================>" + count);
+                            logger.info('count==================>' + count);
                             result.data = data;
                             result.success = true;
-                            result.message = "Added successfully";
+                            result.message = 'Added successfully';
                             return response.status(200).send(result);
                           }
                         })
                         .catch((error) => {
-                          logger.error("error------->" + error);
+                          logger.error('error------->' + error);
                           result.error = error;
                           result.success = false;
                           result.message =
@@ -125,32 +129,32 @@ class MovieController {
                   });
                 } else {
                   result.success = true;
-                  result.message = "Movie details added successfully";
+                  result.message = 'Movie details added successfully';
                   result.data = reply;
                   return response.status(200).send(result);
                 }
               })
               .catch((error) => {
-                logger.error("error in catch------->" + error);
+                logger.error('error in catch------->' + error);
                 result.error = error;
                 result.success = false;
-                result.message = "Request failed while creating movie";
+                result.message = 'Request failed while creating movie';
                 return response.status(500).send(result);
               });
           })
           .catch((error) => {
-            logger.error("error in pcatch------->" + error);
+            logger.error('error in pcatch------->' + error);
             result.error = error;
             result.success = false;
-            result.message = "Request failed while creating producer";
+            result.message = 'Request failed while creating producer';
             return response.status(500).send(result);
           });
       }
     } catch (error) {
-      logger.error("error in try catch------->" + error);
+      logger.error('error in try catch------->' + error);
       let result = {};
       result.success = false;
-      result.message = "Request body is missing an entity";
+      result.message = 'Request body is missing an entity';
       result.error = error;
       return response.status(400).send(result);
     }
@@ -162,11 +166,11 @@ class MovieController {
         request.body.actorName === undefined ||
         request.body.actorName === null
       )
-        throw "Request body cannot be undefined";
+        throw 'Request body cannot be undefined';
 
       request
         .check(
-          "actorName",
+          'actorName',
           "Actor's name must be character string only e.g.(John Latin)"
         )
         .matches(/^[a-zA-Z]+ [a-zA-Z]+$/);
@@ -177,7 +181,7 @@ class MovieController {
       if (errors) {
         result.error = errors[0].msg;
         result.success = false;
-        result.message = "Validation Error";
+        result.message = 'Validation Error';
         return response.status(400).send(result);
       } else {
         let actorNameObject = {
@@ -190,13 +194,13 @@ class MovieController {
           .addActorInMovie(actorNameObject, movieObject)
           .then((data) => {
             result.success = true;
-            result.message = "Successfully added actor to movie";
+            result.message = 'Successfully added actor to movie';
             result.data = data;
             return response.status(200).send(result);
           })
           .catch((error) => {
             result.success = false;
-            result.message = "Unsuccessfully adding actor to movie";
+            result.message = 'Unsuccessfully adding actor to movie';
             result.error = error;
             return response.status(500).send(result);
           });
@@ -204,7 +208,7 @@ class MovieController {
     } catch (error) {
       let result = {};
       result.success = false;
-      result.message = "Request body should contain actorName";
+      result.message = 'Request body should contain actorName';
       result.error = error;
       return response.status(400).send(result);
     }
@@ -213,9 +217,9 @@ class MovieController {
   removeActorFromMovie(request, response) {
     try {
       let result = {};
-      logger.info("in func");
+      logger.info('in func');
       if (request.body.actorId === undefined || request.body.actorId === null)
-        throw "Request body should contain actorId";
+        throw 'Request body should contain actorId';
 
       let removeActorObject = {
         movieId: request.params.movieId,
@@ -229,7 +233,7 @@ class MovieController {
         .then((data) => {
           if (data != null) {
             result.success = true;
-            result.message = "Removed actor from the movie";
+            result.message = 'Removed actor from the movie';
             result.data = data;
             return response.status(200).send(result);
           } else {
@@ -241,14 +245,14 @@ class MovieController {
         })
         .catch((error) => {
           result.success = false;
-          result.message = "Eccor Occurred";
+          result.message = 'Eccor Occurred';
           result.error = error;
           return response.status(400).send(result);
         });
     } catch (error) {
       let result = {};
       result.success = false;
-      result.message = "Incomplete request";
+      result.message = 'Incomplete request';
       result.error = error;
       return response.status(500).send(result);
     }
@@ -261,19 +265,19 @@ class MovieController {
       .then((data) => {
         if (data !== null) {
           result.success = true;
-          result.message = "Successfull got all movies";
+          result.message = 'Successfull got all movies';
           result.data = data;
           return response.status(200).send(result);
         } else {
           result.success = true;
-          result.message = "No data found";
+          result.message = 'No data found';
           result.data = data;
           return response.status(404).send(result);
         }
       })
       .catch((error) => {
         result.success = false;
-        result.message = "Unable to get all movies";
+        result.message = 'Unable to get all movies';
         result.error = error;
         return response.status(500).send(error);
       });
@@ -313,7 +317,7 @@ class MovieController {
     // })
     signedUrl.getSignedUrl(request, (error, data) => {
       if (error) {
-        res.message = "Error while saving image in aws s3";
+        res.message = 'Error while saving image in aws s3';
         res.error = error;
         res.success = false;
         return response.status(500).send(res);
@@ -322,14 +326,14 @@ class MovieController {
         movieService
           .moviePoster(posterObject)
           .then((data) => {
-            res.message = "Successfully Saved";
+            res.message = 'Successfully Saved';
             res.sucess = true;
             res.data = data;
             return response.status(200).send(res);
           })
           .catch((error) => {
             res.error = error;
-            res.message = "Error while saving the data";
+            res.message = 'Error while saving the data';
             res.success = false;
             return response.status(400).send(res);
           });
@@ -344,33 +348,33 @@ class MovieController {
         request.params.movieId === undefined ||
         request.params.movieId === null
       )
-        throw "Request should contain the ID";
+        throw 'Request should contain the ID';
 
       movieService
         .delete({ _id: request.params.movieId })
         .then((data) => {
           if (data !== null) {
             result.data = data;
-            result.message = "Deleted Successfully";
+            result.message = 'Deleted Successfully';
             result.success = true;
             return response.status(200).send(result);
           } else {
             result.success = true;
-            result.message = "No date found";
+            result.message = 'No date found';
             result.data = data;
             return response.status(404).send(result);
           }
         })
         .catch((error) => {
           result.error = error;
-          result.message = "Delete Unsuccessfully";
+          result.message = 'Delete Unsuccessfully';
           result.success = false;
           return response.status(500).send(error);
         });
     } catch (error) {
       let result = {};
       result.error = error;
-      result.message = "Requets body does not contain all the entities";
+      result.message = 'Requets body does not contain all the entities';
       result.success = false;
       return response.status(400).send(error);
     }
@@ -382,17 +386,17 @@ class MovieController {
         request.params.movieId === undefined ||
         request.params.movieId === null
       )
-        throw "Request must contain the movieId";
+        throw 'Request must contain the movieId';
 
       request
-        .check("name", "Name must be character string only e.g.(John Latin)")
+        .check('name', 'Name must be character string only e.g.(John Latin)')
         .matches(/^[a-zA-Z]+ [a-zA-Z]+$/);
       request
-        .check("yearOfRelease", "Year Of Release must be numberis")
+        .check('yearOfRelease', 'Year Of Release must be numberis')
         .isNumeric();
-      request.check("plot", "Plot must be character string").isAlpha();
+      request.check('plot', 'Plot must be character string').isAlpha();
       request
-        .check("yearOfRelease", "Year should be in year format")
+        .check('yearOfRelease', 'Year should be in year format')
         .matches(/^[0-9]{4}$/);
 
       let errors = request.validationErrors();
@@ -402,9 +406,9 @@ class MovieController {
         result.success = false;
         return response.status(400).send(result);
       } else if (
-        "name" in request.body &&
-        "yearOfRelease" in request.body &&
-        "plot" in request.body
+        'name' in request.body &&
+        'yearOfRelease' in request.body &&
+        'plot' in request.body
       ) {
         let editObject = {};
         let idObject = {
@@ -420,32 +424,32 @@ class MovieController {
           .then((data) => {
             if (data !== null) {
               result.success = true;
-              result.message = "Updated Successfully";
+              result.message = 'Updated Successfully';
               result.data = data;
               return response.status(200).send(result);
             } else {
               result.success = true;
-              result.message = "NO movie found..!!!";
+              result.message = 'NO movie found..!!!';
               result.data = data;
               return response.status(404).send(result);
             }
           })
           .catch((error) => {
             result.success = false;
-            result.message = "Error Occured";
+            result.message = 'Error Occured';
             result.error = error;
             return response.status(500).send(result);
           });
       } else {
         result.success = false;
-        result.message = "Please add all the fields";
-        result.error = "Please add all the fields";
+        result.message = 'Please add all the fields';
+        result.error = 'Please add all the fields';
         return response.status(400).send(result);
       }
     } catch (error) {
       let result = {};
       result.success = false;
-      result.message = "Field is missing";
+      result.message = 'Field is missing';
       result.error = error;
       return response.status(400).send(result);
     }
@@ -457,12 +461,12 @@ class MovieController {
         request.body.producerName === undefined ||
         request.body.producerName === null
       )
-        throw "Request body cannot be undefined or null";
+        throw 'Request body cannot be undefined or null';
 
       request
         .check(
-          "producerName",
-          "Producer Name must be character string only e.g.(John Latin)"
+          'producerName',
+          'Producer Name must be character string only e.g.(John Latin)'
         )
         .matches(/^[a-zA-Z]+ [a-zA-Z]+$/);
 
@@ -470,7 +474,7 @@ class MovieController {
       let result = {};
 
       if (errors) {
-        result.message = "Producer name must be character string only";
+        result.message = 'Producer name must be character string only';
         result.success = false;
         result.error = errors[0].msg;
         return response.status(400).send(result);
@@ -483,13 +487,13 @@ class MovieController {
         movieService
           .addProducer(producerObject)
           .then((data) => {
-            result.message = "Successfully added producer";
+            result.message = 'Successfully added producer';
             result.success = true;
             result.data = data;
             return response.status(200).send(result);
           })
           .catch((error) => {
-            result.message = "Adding producer was unsuccessful";
+            result.message = 'Adding producer was unsuccessful';
             result.success = false;
             result.error = error;
             return response.status(500).send(result);
@@ -497,7 +501,7 @@ class MovieController {
       }
     } catch (error) {
       let result = {};
-      result.message = "Producer name must be in the request body";
+      result.message = 'Producer name must be in the request body';
       result.success = false;
       result.error = error;
       return response.status(400).send(result);
@@ -514,13 +518,13 @@ class MovieController {
       movieService
         .removeProducer({ _id: movieObject.movieId }, { producer: null })
         .then((data) => {
-          result.message = "Removed Producer from movie";
+          result.message = 'Removed Producer from movie';
           result.success = true;
           result.data = data;
           return response.status(200).send(result);
         })
         .catch((error) => {
-          result.message = "Producer from movie was not removed";
+          result.message = 'Producer from movie was not removed';
           result.success = false;
           result.error = error;
           return response.status(500).send(result);
@@ -530,37 +534,40 @@ class MovieController {
 
   editMovie(request, response) {
     try {
+      logger.info('Inside cntroller');
       if (
         request.body.name === undefined ||
         request.body.yearOfRelease === undefined ||
         request.body.plot === undefined
       )
-        throw "Request body cannot be undefined";
+        throw 'Request body cannot be undefined';
       if (
         request.body.name === null ||
         request.body.yearOfRelease === null ||
         request.body.plot === null
       )
-        throw "Request body cannot be null";
+        throw 'Request body cannot be null';
 
       request
-        .check("yearOfRelease", "Year Of Release must be numberis")
+        .check('yearOfRelease', 'Year Of Release must be numberis')
         .isNumeric();
       request
-        .check("yearOfRelease", "Year should be in year format")
+        .check('yearOfRelease', 'Year should be in year format')
         .matches(/^[0-9]{4}$/);
-      request.check("plot", "Plot must be character string").isAlpha();
+      // request.check('plot', 'Plot must be character string').isAlpha();
 
       let errors = request.validationErrors();
       let result = {};
       let count = 0;
       let createActorObject = {};
       if (errors) {
+        logger.error('error=====================>', errors);
         result.success = false;
-        result.message = "Validation Error";
+        result.message = 'Validation Error';
         result.error = errors[0].msg;
         return response.status(400).send(result);
       } else {
+        logger.info('inside else');
         let editObject = {
           name: request.body.name,
           yearOfRelease: request.body.yearOfRelease,
@@ -580,70 +587,60 @@ class MovieController {
               bio: request.body.producer.bio,
             };
 
-            logger.info("data after editing movie details" + reply);
+            // logger.info('data after editing movie details');
 
             producerService
-              .update({ name: editObject.name }, editProducer)
+              .create(editProducer)
               .then((data) => {
-                logger.info("data after editing producer details" + data);
+                // logger.info('data after editing producer details');
                 movieModel
                   .update({ _id: reply._id }, { producer: data._id })
                   .then((data) => {
+                    logger.info('length' + Object.keys(request.body.actors).length);
                     if (Object.keys(request.body.actors).length !== 0) {
                       request.body.actors.forEach((element) => {
-                        count++;
                         createActorObject = {
                           name: element.name,
                           sex: element.sex,
                           dob: element.dob,
                           bio: element.bio,
                         };
-                        logger.info(
-                          "createObj==========>" +
-                          JSON.stringify(createActorObject)
-                        );
                         actorService
-                          .update(
-                            { name: createActorObject.name },
-                            createActorObject
-                          )
+                          .addActor(createActorObject)
                           .then((data) => {
-                            logger.info("after ediitng actors" + data);
-                            movieModel
-                              .update(
-                                { _id: reply._id },
-                                { $push: { actors: data._id } }
-                              )
+                            logger.info('after ediitng actors' + data);
+                            movieService
+                              .addActorInMovie({ _id: data._id }, idObject)
                               .then((data) => {
-                                if (
-                                  count ===
-                                  Object.keys(request.body.actors).length
-                                ) {
-                                  logger.info(
-                                    "data after saving every thing" +
-                                    reply +
-                                    count
-                                  );
+                                count++;
+                                // eslint-disable-next-line prettier/prettier
+                                if (count === Object.keys(request.body.actors).length) {
                                   result.data = data;
                                   result.success = true;
                                   result.message =
-                                    "Movie details have been edited successfully";
+                                    'Movie details have been edited successfully';
                                   return response.status(200).send(result);
                                 }
                               })
                               .catch((error) => {
-                                logger.error("error------->" + error);
-                                result.error = error;
-                                result.success = false;
-                                result.message =
-                                  "Request couldn't completely be processed";
-                                return response.status(400).send(result);
+                                // eslint-disable-next-line prettier/prettier
+                                if (
+                                  count ===
+                                  Object.keys(request.body.actors).length
+                                ) {
+                                  logger.error('error------->' + error);
+                                  result.error = error;
+                                  result.success = false;
+                                  result.message =
+                                    "Request couldn't completely be processed";
+                                  return response.status(400).send(result);
+                                }
                               });
                           })
                           .catch((error) => {
                             result.error = error;
                             result.success = false;
-                            result.message = "Editting actors was unsuccessful";
+                            result.message = 'Editting actors was unsuccessful';
                             return response.status(500).send(result);
                           });
                       });
@@ -653,13 +650,13 @@ class MovieController {
                         .then((data) => {
                           result.success = true;
                           result.message =
-                            "Successful editing of movie details";
+                            'Successful editing of movie details';
                           result.data = data;
                           return response.status(200).send(result);
                         })
                         .catch((error) => {
                           result.message =
-                            "Unsuccessful editing of movie details";
+                            'Unsuccessful editing of movie details';
                           result.success = false;
                           result.error = error;
                           return response.status(500).send(result);
@@ -669,22 +666,22 @@ class MovieController {
                   .catch((error) => {
                     result.success = false;
                     result.message =
-                      "Error Occurred by saving producer id in movies data";
+                      'Error Occurred by saving producer id in movies data';
                     result.error = error;
                     return response.status(500).send(result);
                   });
               })
               .catch((error) => {
-                logger.error("----------------------->", error);
+                logger.error('----------------------->', error);
                 result.success = false;
-                result.message = "Editing producer details was unsuccessful";
+                result.message = 'Editing producer details was unsuccessful';
                 result.error = error;
                 return response.status(500).send(result);
               });
           })
           .catch((error) => {
             result.success = false;
-            result.message = "Editing movie details was unsuccessful";
+            result.message = 'Editing movie details was unsuccessful';
             result.error = error;
             return response.status(500).send(result);
           });
@@ -692,7 +689,7 @@ class MovieController {
     } catch (error) {
       let result = {};
       result.success = false;
-      result.message = "Request body should contain all entities";
+      result.message = 'Request body should contain all entities';
       result.error = error;
       return response.status(400).send(result);
     }
@@ -708,19 +705,19 @@ class MovieController {
       .then((data) => {
         if (data !== null) {
           result.success = true;
-          result.message = "Successfull got all movies";
+          result.message = 'Successfull got all movies';
           result.data = data;
           return response.status(200).send(result);
         } else {
           result.success = true;
-          result.message = "No data found";
+          result.message = 'No data found';
           result.data = data;
           return response.status(404).send(result);
         }
       })
       .catch((error) => {
         result.success = false;
-        result.message = "Unable to get all movies";
+        result.message = 'Unable to get all movies';
         result.error = error;
         return response.status(500).send(error);
       });

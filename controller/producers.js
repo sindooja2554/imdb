@@ -8,8 +8,8 @@
  * @since       03 April 2020
  */
 
-let producerService = require("../services/producers");
-let logger = require("../config/winston");
+let producerService = require('../services/producers');
+let logger = require('../config/winston');
 
 class ProducerController {
   create(request, response) {
@@ -20,28 +20,28 @@ class ProducerController {
         request.body.dob === undefined ||
         request.body.bio === undefined
       )
-        throw "Request body cannot be undefined";
+        throw 'Request body cannot be undefined';
       if (
         request.body.name === undefined ||
         request.body.sex === undefined ||
         request.body.dob === undefined ||
         request.body.bio === undefined
       )
-        throw "Request body cannot be null";
+        throw 'Request body cannot be null';
       if (
-        request.body.sex !== "m" &&
-        request.body.sex !== "M" &&
-        request.body.sex !== "f" &&
-        request.body.sex !== "F"
+        request.body.sex !== 'm' &&
+        request.body.sex !== 'M' &&
+        request.body.sex !== 'f' &&
+        request.body.sex !== 'F'
       )
-        throw "Producer sex should be F/f or M/m";
+        throw 'Producer sex should be F/f or M/m';
 
       request
-        .check("name", "Name must be character string only e.g.(John Latin)")
+        .check('name', 'Name must be character string only e.g.(John Latin)')
         .matches(/^[a-zA-Z]+ [a-zA-Z]+$/);
-      request.check("sex", "Sex must be character string only").isAlpha();
+      request.check('sex', 'Sex must be character string only').isAlpha();
       request
-        .check("dob", "Date of birth must be in DD/MM/YYYY or DD-MM-YYYY")
+        .check('dob', 'Date of birth must be in DD/MM/YYYY or DD-MM-YYYY')
         .matches(
           /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
         );
@@ -64,7 +64,7 @@ class ProducerController {
           .create(addingProducerObject)
           .then((data) => {
             result.success = true;
-            result.message = "Created Sucessfully";
+            result.message = 'Created Sucessfully';
             result.data = data;
             return response.status(200).send(result);
           })
@@ -79,7 +79,7 @@ class ProducerController {
     } catch (error) {
       let result = {};
       result.success = false;
-      result.message = "Request body missing an entity";
+      result.message = 'Request body missing an entity';
       result.error = error;
       return response.status(400).send(result);
     }
@@ -92,19 +92,19 @@ class ProducerController {
       .then((data) => {
         if (data !== null) {
           result.success = true;
-          result.message = "Successfull getting all the data";
+          result.message = 'Successfull getting all the data';
           result.data = data;
           return response.status(200).send(result);
         } else {
           result.success = true;
-          result.message = "No data found";
+          result.message = 'No data found';
           result.data = data;
           return response.status(404).send(result);
         }
       })
       .catch((error) => {
         result.success = false;
-        result.message = "Error while processing the request";
+        result.message = 'Error while processing the request';
         result.error = error;
         return response.status(500).send(result);
       });
@@ -120,19 +120,19 @@ class ProducerController {
       .then((data) => {
         if (data !== null) {
           result.data = data;
-          result.message = "Successfully delete";
+          result.message = 'Successfully delete';
           result.success = true;
           return response.status(200).send(result);
         } else {
           result.data = data;
           result.success = true;
-          result.message = "No data found";
+          result.message = 'No data found';
           return response.status(404).send(result);
         }
       })
       .catch((error) => {
         result.error = error;
-        result.message = "Delete Unsuccessful";
+        result.message = 'Delete Unsuccessful';
         result.success = false;
         return response.status(500).send(result);
       });
@@ -148,19 +148,19 @@ class ProducerController {
       .findOne(producerObject)
       .then((data) => {
         if (data !== null) {
-          result.message = "Successfully found data";
+          result.message = 'Successfully found data';
           result.success = true;
           result.data = data;
           return response.status(200).send(result);
         } else {
-          result.message = "Data not found";
+          result.message = 'Data not found';
           result.success = true;
           result.data = data;
           return response.status(404).send(result);
         }
       })
       .catch((error) => {
-        result.message = "Error while finding data";
+        result.message = 'Error while finding data';
         result.success = false;
         result.error = error;
         return response.status(500).send(result);
@@ -175,28 +175,28 @@ class ProducerController {
         request.body.dob === undefined ||
         request.body.bio === undefined
       )
-        throw "Request body cannot be undefined";
+        throw 'Request body cannot be undefined';
       if (
         request.body.name === undefined ||
         request.body.sex === undefined ||
         request.body.dob === undefined ||
         request.body.bio === undefined
       )
-        throw "Request body cannot be null";
+        throw 'Request body cannot be null';
       if (
-        request.body.sex !== "m" &&
-        request.body.sex !== "M" &&
-        request.body.sex !== "f" &&
-        request.body.sex !== "F"
+        request.body.sex !== 'm' &&
+        request.body.sex !== 'M' &&
+        request.body.sex !== 'f' &&
+        request.body.sex !== 'F'
       )
-        throw "Producer sex should be F/f or M/m";
+        throw 'Producer sex should be F/f or M/m';
 
       request
-        .check("name", "Name must be character string only e.g.(John Latin)")
+        .check('name', 'Name must be character string only e.g.(John Latin)')
         .matches(/^[a-zA-Z]+ [a-zA-Z]+$/);
-      request.check("sex", "Sex must be character string only").isAlpha();
+      request.check('sex', 'Sex must be character string only').isAlpha();
       request
-        .check("dob", "Date of birth must be in DD/MM/YYYY or DD-MM-YYYY")
+        .check('dob', 'Date of birth must be in DD/MM/YYYY or DD-MM-YYYY')
         .matches(
           /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
         );
@@ -206,7 +206,7 @@ class ProducerController {
       if (errors) {
         result.error = errors[0].msg;
         result.success = false;
-        result.message = "Validation Error";
+        result.message = 'Validation Error';
         return response.status(400).send(result);
       } else {
         let editObject = {
@@ -223,28 +223,28 @@ class ProducerController {
           .then((data) => {
             if (data !== null) {
               result.success = true;
-              result.message = "Update Successful";
+              result.message = 'Update Successful';
               result.data = data;
               return response.status(200).send(result);
             } else {
               result.success = true;
-              result.message = "Data not found";
+              result.message = 'Data not found';
               result.data = data;
               return response.status(404).send(result);
             }
           })
           .catch((error) => {
             result.success = false;
-            result.message = "Update Unsuccessful";
+            result.message = 'Update Unsuccessful';
             result.error = error;
             return response.status(500).send(result);
           });
       }
     } catch (error) {
       let result = {};
-      logger.error("------------------------" + error);
+      logger.error('------------------------' + error);
       result.success = false;
-      result.message = "Request body is missing a varibale";
+      result.message = 'Request body is missing a varibale';
       result.error = error;
       return response.status(400).send(result);
     }

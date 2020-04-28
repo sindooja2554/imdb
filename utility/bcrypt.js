@@ -9,7 +9,7 @@
  * @const       bcrypt Bcrypt constant having the `bcrypt` module
  */
 
-const bcrypt = require("bcrypt");
+const bcrypt = require('bcrypt');
 
 module.exports = {
   /**

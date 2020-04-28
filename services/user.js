@@ -6,10 +6,10 @@
  * @version     node v12.16.1
  * @since       25 April 2020
  */
-let userModel = require("../app/model/user");
-let bcrypt = require("../utility/bcrypt");
-let logger = require("../config/winston");
-require("dotenv/").config();
+let userModel = require('../app/model/user');
+let bcrypt = require('../utility/bcrypt');
+let logger = require('../config/winston');
+require('dotenv/').config();
 //
 class Services {
   /**
@@ -43,7 +43,7 @@ class Services {
             }
           );
         } else {
-          res.message = "Already registered";
+          res.message = 'Already registered';
           res.success = false;
           res.data = data;
           resolve(res);
@@ -65,7 +65,7 @@ class Services {
       if (error) {
         return callback(error);
       } else if (data === null) {
-        res.message = "Please register to login";
+        res.message = 'Please register to login';
         res.success = false;
         res.data = data;
         return callback(null, res);
@@ -77,7 +77,7 @@ class Services {
             if (error) {
               return callback(error);
             } else if (success === false) {
-              res.message = "Password did not match";
+              res.message = 'Password did not match';
               res.success = false;
               return callback(null, res);
             } else {
@@ -88,7 +88,7 @@ class Services {
           }
         );
       } else {
-        res.message = "Please verify your email to login";
+        res.message = 'Please verify your email to login';
         res.success = false;
         res.data = data;
         return callback(null, res);
@@ -164,7 +164,7 @@ class Services {
       } else if (data == null) {
         return callback(error);
       } else {
-        logger.info("response in service", data);
+        logger.info('response in service', data);
         return callback(null, data);
       }
     });

@@ -12,7 +12,7 @@
  * @const       mongoose Mongoose constant having the `mongoose` module
  */
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const schema = mongoose.Schema;
 
@@ -41,7 +41,7 @@ const producerSchema = mongoose.Schema(
   }
 );
 
-let Producer = mongoose.model("Producer", producerSchema);
+let Producer = mongoose.model('Producer', producerSchema);
 
 class ProducerApi {
   /**

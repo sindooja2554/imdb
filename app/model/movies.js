@@ -12,7 +12,7 @@
  * @const       mongoose Mongoose constant having the `mongoose` module
  */
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const schema = mongoose.Schema;
 
@@ -41,18 +41,18 @@ const movieSchema = mongoose.Schema(
     },
     poster: {
       type: String,
-      default: "",
+      default: '',
     },
     actors: [
       {
         type: schema.Types.ObjectId,
-        ref: "Actor",
+        ref: 'Actor',
         default: [],
       },
     ],
     producer: {
       type: schema.Types.ObjectId,
-      ref: "Producer",
+      ref: 'Producer',
       default: null,
     },
   },
@@ -61,7 +61,7 @@ const movieSchema = mongoose.Schema(
   }
 );
 
-let Movie = mongoose.model("Movie", movieSchema);
+let Movie = mongoose.model('Movie', movieSchema);
 
 class MovieApi {
   /**
@@ -99,7 +99,9 @@ class MovieApi {
    */
   findOne(request) {
     return new Promise((resolve, reject) => {
-      Movie.findOne(request).populate("actors").populate("producer")
+      Movie.findOne(request)
+        .populate('actors')
+        .populate('producer')
         .then((data) => {
           return resolve(data);
         })
@@ -132,7 +134,7 @@ class MovieApi {
    * @function findAll
    */
   async findAll() {
-    let data = await Movie.find().populate("actors").populate("producer");
+    let data = await Movie.find().populate('actors').populate('producer');
     return data;
   }
 

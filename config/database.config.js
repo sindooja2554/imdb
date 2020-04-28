@@ -10,16 +10,16 @@
  * @const       mongoose Mongoose constant having the `mongoose` module
  */
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const logger = require("./winston");
+const logger = require('./winston');
 
 class Database {
   constructor() {
     this.mongoose = mongoose;
     this.host = process.env.HOST;
     this.port = process.env.DB_PORT;
-    this.url = process.env.URL || "mongodb://127.0.0.1:27017/imdb";
+    this.url = process.env.URL || 'mongodb://127.0.0.1:27017/imdb';
   }
 
   connect() {
@@ -33,21 +33,21 @@ class Database {
   }
 
   monitor() {
-    this.mongoose.connection.on("disconnected", function () {
-      logger.info("mongo db connection closed");
+    this.mongoose.connection.on('disconnected', function () {
+      logger.info('mongo db connection closed');
       process.exit(0);
     });
 
-    mongoose.connection.on("connecting", function () {
-      logger.info("trying to establish a connection to mongo");
+    mongoose.connection.on('connecting', function () {
+      logger.info('trying to establish a connection to mongo');
     });
 
-    mongoose.connection.on("connected", function () {
-      logger.info("connection established successfully");
+    mongoose.connection.on('connected', function () {
+      logger.info('connection established successfully');
     });
 
-    mongoose.connection.on("error", function (err) {
-      logger.error("connection to mongo failed ", err);
+    mongoose.connection.on('error', function (err) {
+      logger.error('connection to mongo failed ', err);
       process.exit(0);
     });
   }

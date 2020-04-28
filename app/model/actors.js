@@ -12,7 +12,7 @@
  * @const       mongoose Mongoose constant having the `mongoose` module
  */
 
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const actorSchema = mongoose.Schema(
   {
@@ -39,7 +39,7 @@ const actorSchema = mongoose.Schema(
   }
 );
 
-let Actor = mongoose.model("Actor", actorSchema);
+let Actor = mongoose.model('Actor', actorSchema);
 
 class ActorApi {
   /**

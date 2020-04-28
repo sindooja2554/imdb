@@ -12,27 +12,27 @@
  * @const       mongoose   Mongoose constant having the `mongoose` module
  * @const       app        App constant having the `express()`
  */
-const express = require("express");
-const validator = require("express-validator");
-const bodyparser = require("body-parser");
-const swaggerUi = require("swagger-ui-express");
-const cors = require("cors");
-const mongoose = require("./config/database.config");
-const route = require("./routes/route");
-const logger = require("./config/winston");
-const swaggerDocument = require("./swagger");
-const redis = require("./services/redis");
-require("dotenv/").config();
+const express = require('express');
+const validator = require('express-validator');
+const bodyparser = require('body-parser');
+const swaggerUi = require('swagger-ui-express');
+const cors = require('cors');
+const mongoose = require('./config/database.config');
+const route = require('./routes/route');
+const logger = require('./config/winston');
+const swaggerDocument = require('./swagger');
+const redis = require('./services/redis');
+require('dotenv/').config();
 
 const app = express();
 
 const port = process.env.PORT;
 
 app.use(cors());
-app.use("/imdb", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/imdb', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(bodyparser.json());
 app.use(validator());
-app.use("/", route);
+app.use('/', route);
 
 app.listen(port, () => {
   mongoose.connect();

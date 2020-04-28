@@ -49,7 +49,7 @@
 //     }
 // });
 
-let AWS = require("aws-sdk");
+let AWS = require('aws-sdk');
 
 // AWS.config.credentials = new AWS.Credentials("AKIAJTN6WZYXTU6CN7DA", "5Y/fKMhABSa5X7c3oDqVe2vLxY7a67nrHpZH5fA3")
 // console.log(AWS.config.credentials)
@@ -60,13 +60,13 @@ let AWS = require("aws-sdk");
 // console.log ('====')
 // console.log (AWS.config.credentials)
 
-AWS.config.region = "ap-south-1"; // Sydney
-AWS.config.apiVersion = "2012-05-04";
+AWS.config.region = 'ap-south-1'; // Sydney
+AWS.config.apiVersion = '2012-05-04';
 
 function getEC2Rolename(AWS) {
   let promise = new Promise((resolve, reject) => {
     let metadata = new AWS.MetadataService();
-    metadata.request("/latest/meta-data/iam/security-credentials/", function (
+    metadata.request('/latest/meta-data/iam/security-credentials/', function (
       err,
       rolename
     ) {
@@ -85,7 +85,7 @@ function getEC2Credentials(AWS, rolename) {
   let promise = new Promise((resolve, reject) => {
     let metadata = new AWS.MetadataService();
     metadata.request(
-      "/latest/meta-data/iam/security-credentials/" + rolename,
+      '/latest/meta-data/iam/security-credentials/' + rolename,
       function (err, data) {
         if (err) {
           reject(err);
@@ -100,14 +100,14 @@ function getEC2Credentials(AWS, rolename) {
 
 getEC2Rolename(AWS)
   .then((rolename) => {
-    console.log("rolename=======>", rolename);
+    console.log('rolename=======>', rolename);
     return getEC2Credentials(AWS, rolename);
   })
   .then((credentials) => {
     AWS.config.accessKeyId = credentials.AccessKeyId;
     AWS.config.secretAccessKey = credentials.SecretAccessKey;
     AWS.config.sessionToken = credentials.Token;
-    console.log("aws=====================>", AWS.config);
+    console.log('aws=====================>', AWS.config);
   })
   .catch((err) => {
     console.log(err);
