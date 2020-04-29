@@ -7,13 +7,16 @@ module.exports = {
     let transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'sindoojagajam@gmail.com',
-        pass: 'zjsltiybgopjwpqp',
+        user: process.env.EMAIL,
+        pass: process.env.PASS,
+      },
+      tls : {
+        rejectUnauthorized : false,
       },
     });
 
     let mailOptions = {
-      from: 'sindoojagajam@gmail.com',
+      from: process.env.EMAIL,
       to: email,
       subject: 'Sending Email using Node.js',
       text: url,

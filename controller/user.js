@@ -81,7 +81,6 @@ class Controller {
         result.success = false;
         return response.status(400).send(result);
       } else {
-        logger.info('this from logger', request.body);
         let userData = {
           firstName: request.body.firstName,
           lastName: request.body.lastName,
