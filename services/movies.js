@@ -77,19 +77,23 @@ class MovieServices {
   }
 
   removeActorFromMovie(request, editObject) {
+    logger.info("request in service pf remove actor");
     return new Promise((resolve, reject) => {
       movieModel.findOne(request).then((data) => {
+        logger.info(data);
         if (data !== null) {
           if (Object.keys(data.actors).length !== 0) {
             for (let i = 0; i < Object.keys(data.actors).length; i++) {
               if (
-                JSON.stringify(data.actors[i]) ===
+                JSON.stringify(data.actors[i]._id) ===
                 JSON.stringify(editObject.actorId)
               ) {
+                logger.info(JSON.stringify(data.actors[i]) === JSON.stringify(editObject.actorId))
                 data.actors.splice(i, 1);
                 movieModel
                   .update({ _id: data._id }, { actors: data.actors })
                   .then((data) => {
+                    logger.info("data--------------->",data);
                     return resolve(data);
                   })
                   .catch((error) => {
