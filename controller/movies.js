@@ -22,18 +22,20 @@ class MovieController {
       if (
         request.body.name === undefined ||
         request.body.yearOfRelease === undefined ||
-        request.body.plot === undefined
+        request.body.plot === undefined ||
+        request.body.releaseDate === undefined
       )
         throw 'Request body cannot be undefined';
       if (
         request.body.name === null ||
         request.body.yearOfRelease === null ||
-        request.body.plot === null
+        request.body.plot === null ||
+        request.body.releaseDate === null
       )
         throw 'Request body cannot be null';
-
+        logger.info("checkinh request body")
       request
-        .check('yearOfRelease', 'Year Of Release must be numberis')
+        .check('yearOfRelease', 'Year Of Release must be number')
         .isNumeric();
       request
         .check('yearOfRelease', 'Year should be in year format')
@@ -43,20 +45,23 @@ class MovieController {
         .check(
           'releaseDate',
           'Date of release must be in DD/MM/YYYY or DD-MM-YYYY'
-        )
-        .matches(
-          /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
-        );
+        ).isISO8601().toDate()
+        // .isISO8601(request.body.releaseDate.toISOString());
+        // .matches(
+        //   /^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/
+        // );
 
       let errors = request.validationErrors();
       let result = {};
 
       if (errors) {
+        logger.error("error-->"+ JSON.stringify(errors));
         result.error = errors;
         result.success = false;
         request.message = errors.msg;
         return response.status(400).send(result);
       } else {
+        logger.info("in else =============>", +request.body);
         let addMovieObject = {
           actors: [{}],
         };
@@ -78,7 +83,7 @@ class MovieController {
               yearOfRelease: request.body.yearOfRelease,
               plot: request.body.plot,
               releaseDate: request.body.releaseDate,
-              rating: request.body.rating,
+              // rating: request.body.rating,
             };
             logger.info(
               'data after adding actor ' + JSON.stringify(addMovieObject)
@@ -88,12 +93,11 @@ class MovieController {
               .then((reply) => {
                 logger.info(
                   'actors length ------------------>' +
-                  Object.keys(request.body.actors).length
+                  request.body.actors.length
                 );
                 let count = 0;
                 if (Object.keys(request.body.actors).length !== 0) {
                   request.body.actors.forEach((element) => {
-                    count++;
                     createActorObject = {
                       name: element.name,
                       sex: element.sex || null,
@@ -107,6 +111,7 @@ class MovieController {
                           { $push: { actors: data._id } }
                         )
                         .then((data) => {
+                          count++;
                           if (
                             count === Object.keys(request.body.actors).length
                           ) {
