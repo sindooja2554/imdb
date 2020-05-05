@@ -77,7 +77,7 @@ class MovieServices {
   }
 
   removeActorFromMovie(request, editObject) {
-    logger.info("request in service pf remove actor");
+    logger.info("request in service of remove actor");
     return new Promise((resolve, reject) => {
       movieModel.findOne(request).then((data) => {
         logger.info(data);

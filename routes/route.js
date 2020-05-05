@@ -51,6 +51,11 @@ routes.get('/verify/:url', (request, response) => {
 
 routes.post('/verifyuser/:token', jwt.verifyToken, user.isVerifiedController);
 
+routes.post('/watchlist/:movieId',jwt.verifyToken, user.addMovieInWatchList);
+
+routes.post('/removefromwatchlist/:movieId',jwt.verifyToken, user.removeMovieFromWatchList);
+
+
 routes.post('/imageupload', jwt.verifyToken, function (request, response) {
   logger.info('req ', JSON.stringify(request.body));
   let imageSaveObject = {};

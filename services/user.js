@@ -7,6 +7,7 @@
  * @since       25 April 2020
  */
 let userModel = require('../app/model/user');
+let movieModel = require('../app/model/movies');
 let bcrypt = require('../utility/bcrypt');
 let logger = require('../config/winston');
 require('dotenv/').config();
@@ -221,6 +222,69 @@ class Services {
               return reject(error);
             });
         }
+      });
+    });
+  }
+
+  addMovieInWatchList(request) {
+    return new Promise((resolve,reject)=>{
+      userModel.findOne({_id : request.userId},(error,reply) => {
+        if (error) {
+          return reject(error);
+        } else if (reply === null) {
+          return reject('No user Found');
+        } else {
+          movieModel.findOne({ _id: request.movieId}).then((data)=>{
+            if(data !== null) {
+              userModel
+                .updateOne({ _id: reply._id }, { $push: { watchList: data._id } })
+                .then((data) => {
+                  return resolve(data);
+                })
+                .catch((error) => {
+                  return reject(error);
+                });
+            } else if(data === null) {
+              return reject('No movie present with this Id');
+            }
+          })
+        }
+      })
+    })
+  }
+
+  removeMovieFromWatchList(editObject) {
+    logger.info("request in service of remove movie" + JSON.stringify(editObject));
+    return new Promise((resolve, reject) => {
+      userModel.findOne({ _id: editObject.userId },(error,data)=>{
+        if(error) {
+          logger.error('error----------->' + error);
+          return reject(error);
+        } else if (data !== null) {
+          logger.info("data after find one" + JSON.stringify(data))
+            if (Object.keys(data.watchList).length !== 0) {
+              for (let i = 0; i < Object.keys(data.watchList).length; i++) {
+                if (
+                  JSON.stringify(data.watchList[i]._id) ===
+                  JSON.stringify(editObject.movieId)
+                ) {
+                  logger.info(JSON.stringify(data.watchList[i]) === JSON.stringify(editObject.movieId))
+                  data.watchList.splice(i, 1);
+                  userModel
+                    .updateOne({ _id: data._id }, { watchList: data.watchList })
+                    .then((data) => {
+                      logger.info("data--------------->",data);
+                      return resolve(data);
+                    })
+                    .catch((error) => {
+                      return reject(error);
+                    });
+                }
+              }
+            }
+          } else {
+            return reject('No user Found');
+          }
       });
     });
   }

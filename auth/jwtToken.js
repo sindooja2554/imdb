@@ -34,7 +34,7 @@ module.exports = {
    */
   verifyToken(req, res, next) {
     try {
-      console.log('token1', req.headers, req.params.token);
+      logger.info('token1', req.headers, req.params.token);
       // eslint-disable-next-line prefer-destructuring
       let token = req.headers.token || req.params.token;
       if (
@@ -64,35 +64,15 @@ module.exports = {
                 redisData = 'loginToken';
                 break;
               }
-              case 'label': {
-                redisData = 'loginToken';
-                break;
-              }
               case 'verifyuser': {
                 redisData = 'registrationToken';
                 break;
               }
-              case 'note': {
+              case 'watchlist': {
                 redisData = 'loginToken';
                 break;
               }
-              case 'remainder': {
-                redisData = 'loginToken';
-                break;
-              }
-              case 'search': {
-                redisData = 'loginToken';
-                break;
-              }
-              case 'addlabel': {
-                redisData = 'loginToken';
-                break;
-              }
-              case 'removelabel': {
-                redisData = 'loginToken';
-                break;
-              }
-              case 'notesequencing': {
+              case 'removefromwatchlist': {
                 redisData = 'loginToken';
                 break;
               }

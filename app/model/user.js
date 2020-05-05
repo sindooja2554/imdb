@@ -15,6 +15,8 @@
 const mongoose = require('mongoose');
 let logger = require('../../config/winston');
 
+const schema = mongoose.Schema;
+
 const UserSchema = mongoose.Schema(
   {
     firstName: {
@@ -54,6 +56,13 @@ const UserSchema = mongoose.Schema(
       type: String,
       default: '',
     },
+    watchList: [
+      {
+        type: schema.Types.ObjectId,
+        ref: 'Movie',
+        default: [],
+      },
+    ],
   },
   {
     timestamps: true,
@@ -100,19 +109,6 @@ class Users {
           return reject(error);
         });
     });
-
-    //  ,(error,data)=>{
-    //     if(error)
-    //     {
-    //         console.log("model",error);
-    //         return callback(error);
-    //     }
-    //     else
-    //     {
-    //         console.log(data);
-    //         return callback(null,data);
-    //     }
-    // })
   }
 
   /**

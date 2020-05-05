@@ -368,6 +368,58 @@ class Controller {
         });
     });
   }
+
+  addMovieInWatchList(request, response) {
+      let watchlistObject = {
+        movieId: request.params.movieId,
+        userId: request.body.data._id,
+      };
+      let result = {};
+      userServices.addMovieInWatchList(watchlistObject)
+        .then((data) => {
+          result.success = true;
+          result.message = 'Successfully added movie to users watchlist';
+          result.data = data;
+          return response.status(200).send(result);
+        })
+        .catch((error) => {
+          result.success = false;
+          result.message = 'Unsuccessfully adding movie to users watchlist';
+          result.error = error;
+          return response.status(500).send(result);
+        });
+  }
+
+  removeMovieFromWatchList(request, response) {
+      let result = {};
+      logger.info('in func');
+
+      let removeActorObject = {
+        movieId: request.params.movieId,
+        userId: request.body.data._id,
+      };
+      userServices
+        .removeMovieFromWatchList(removeActorObject)
+        .then((data) => {
+          if (data != null) {
+            result.success = true;
+            result.message = 'Removed movie from the users watchlist';
+            result.data = data;
+            return response.status(200).send(result);
+          } else {
+            result.success = false;
+            result.message = "Movie wasn't removed from the users watchlist";
+            result.data = data;
+            return response.status(400).send(result);
+          }
+        })
+        .catch((error) => {
+          result.success = false;
+          result.message = 'Error Occurred while removing movie from watchlist';
+          result.error = error;
+          return response.status(500).send(result);
+        }); 
+  }
 }
 
 module.exports = new Controller();

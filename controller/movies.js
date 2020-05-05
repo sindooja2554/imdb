@@ -259,7 +259,7 @@ class MovieController {
       result.success = false;
       result.message = 'Incomplete request';
       result.error = error;
-      return response.status(500).send(result);
+      return response.status(400).send(result);
     }
   }
 
