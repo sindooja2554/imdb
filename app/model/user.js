@@ -80,14 +80,19 @@ class Users {
    * @param {*}   callback
    */
   findOne(request, callback) {
-    User.findOne(request, (error, data) => {
+    User.findOne(request).exec(function(error, data) {
       if (error) {
         return callback('Error while finding user');
       } else if (data === null) {
-        logger.info('model find one', data);
         return callback(error, null);
       } else {
-        return callback(null, data);
+        User.populate(data, {"path" : "watchList"}, (error,data)=>{
+          if(error) {
+            return callback(error);
+          }else {
+            return callback(null, data);
+          }
+        })
       }
     });
   }

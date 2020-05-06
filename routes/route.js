@@ -55,6 +55,7 @@ routes.post('/watchlist/:movieId',jwt.verifyToken, user.addMovieInWatchList);
 
 routes.post('/removefromwatchlist/:movieId',jwt.verifyToken, user.removeMovieFromWatchList);
 
+routes.post('/findone',jwt.verifyToken, user.findOne);
 
 routes.post('/imageupload', jwt.verifyToken, function (request, response) {
   logger.info('req ', JSON.stringify(request.body));

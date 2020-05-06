@@ -420,6 +420,26 @@ class Controller {
           return response.status(500).send(result);
         }); 
   }
+
+  findOne(request, response) {
+    let findObject = {
+      userId: request.body.data._id,
+    };
+    let result = {};
+
+    userServices.findOne(findObject).then((data)=>{
+      result.data = data;
+      result.success = true;
+      result.message = "Successfully got the user details";
+      return response.status(200).send(result);
+    })
+    .catch((error)=>{
+      result.error = error;
+      result.success = false;
+      result.message = "Did not get the users details";
+      return response.status(500).send(result);
+    });
+  }
 }
 
 module.exports = new Controller();

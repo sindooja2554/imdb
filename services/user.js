@@ -233,7 +233,7 @@ class Services {
           return reject(error);
         } else if (reply === null) {
           return reject('No user Found');
-        } else {
+        } else {  
           movieModel.findOne({ _id: request.movieId}).then((data)=>{
             if(data !== null) {
               userModel
@@ -287,6 +287,22 @@ class Services {
           }
       });
     });
+  }
+
+  findOne(request) {
+    return new Promise((resolve, reject) => {
+      userModel.findOne({ _id: request.userId }, (error,data)=>{
+        if(error) {
+          return reject(error)
+        } else {
+          if(data === null) {
+            return reject("No user find");
+          } else if(data !== null) {
+            return resolve(data)
+          }
+        }
+      })
+    })
   }
 }
 
